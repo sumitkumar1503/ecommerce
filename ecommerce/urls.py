@@ -19,7 +19,9 @@ urlpatterns = [
     path('adminclick', views.adminclick_view),
     path('adminlogin', LoginView.as_view(template_name='ecom/adminlogin.html')),
     path('admin-dashboard', views.admin_dashboard_view,name='admin-dashboard'),
-
+    path('view-customer', views.view_customer_view,name='view-customer'),
+    path('delete-customer/<int:pk>', views.delete_customer_view,name='delete-customer'),
+    path('update-customer/<int:pk>', views.update_customer_view,name='update-customer'),
 
     path('customersignup', views.customer_signup_view),
     path('customerlogin', LoginView.as_view(template_name='ecom/customerlogin.html')),

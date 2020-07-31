@@ -58,11 +58,33 @@ def afterlogin_view(request):
 def admin_dashboard_view(request):
     return render(request,'ecom/admin_dashboard.html')
 
+def view_customer_view(request):
+    customers=models.Customer.objects.all()
+    return render(request,'ecom/view_customer.html',{'customers':customers})
 
+def delete_customer_view(request,pk):
+    customer=models.Customer.objects.get(id=pk)
+    user=models.User.objects.get(id=customer.user_id)
+    user.delete()
+    customer.delete()
+    return redirect('view-customer')
 
-
-
-
+def update_customer_view(request,pk):
+    customer=models.Customer.objects.get(id=pk)
+    user=models.User.objects.get(id=customer.user_id)
+    userForm=forms.CustomerUserForm(instance=user)
+    customerForm=forms.CustomerForm(request.FILES,instance=customer)
+    mydict={'userForm':userForm,'customerForm':customerForm}
+    if request.method=='POST':
+        userForm=forms.CustomerUserForm(request.POST,instance=user)
+        customerForm=forms.CustomerForm(request.POST,request.FILES,instance=customer)
+        if userForm.is_valid() and customerForm.is_valid():
+            user=userForm.save()
+            user.set_password(user.password)
+            user.save()
+            customerForm.save()
+            return redirect('view-customer')
+    return render(request,'ecom/admin_update_customer.html',context=mydict)
 
 
 #---------------------------------------------------------------------------------
