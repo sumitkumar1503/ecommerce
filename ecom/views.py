@@ -77,7 +77,7 @@ def update_customer_view(request,pk):
     mydict={'userForm':userForm,'customerForm':customerForm}
     if request.method=='POST':
         userForm=forms.CustomerUserForm(request.POST,instance=user)
-        customerForm=forms.CustomerForm(request.POST,request.FILES,instance=customer)
+        customerForm=forms.CustomerForm(request.POST,instance=customer)
         if userForm.is_valid() and customerForm.is_valid():
             user=userForm.save()
             user.set_password(user.password)
@@ -85,6 +85,38 @@ def update_customer_view(request,pk):
             customerForm.save()
             return redirect('view-customer')
     return render(request,'ecom/admin_update_customer.html',context=mydict)
+
+
+
+def admin_products_view(request):
+    products=models.Product.objects.all()
+    return render(request,'ecom/admin_products.html',{'products':products})
+
+
+def admin_add_product_view(request):
+    productForm=forms.ProductForm()
+    if request.method=='POST':
+        productForm=forms.ProductForm(request.POST, request.FILES)
+        if productForm.is_valid():
+            productForm.save()
+        return HttpResponseRedirect('admin-products')
+    return render(request,'ecom/admin_add_products.html',{'productForm':productForm})
+
+
+def delete_product_view(request,pk):
+    product=models.Product.objects.get(id=pk)
+    product.delete()
+    return redirect('admin-products')
+
+def update_product_view(request,pk):
+    product=models.Product.objects.get(id=pk)
+    productForm=forms.ProductForm(instance=product)
+    if request.method=='POST':
+        productForm=forms.ProductForm(request.POST,request.FILES,instance=product)
+        if productForm.is_valid():
+            productForm.save()
+            return redirect('admin-products')
+    return render(request,'ecom/admin_update_product.html',{'productForm':productForm})
 
 
 #---------------------------------------------------------------------------------
@@ -106,7 +138,7 @@ def customer_home_view(request):
 
 
 #---------------------------------------------------------------------------------
-#------------------------ ABOUT US AND CONTACT US VIEWS START ------------------------------
+#------------------------ ABOUT US AND CONTACT US VIEWS START --------------------
 #---------------------------------------------------------------------------------
 def aboutus_view(request):
     return render(request,'ecom/aboutus.html')

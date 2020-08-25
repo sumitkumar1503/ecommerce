@@ -15,6 +15,10 @@ class CustomerForm(forms.ModelForm):
         model=models.Customer
         fields=['address','mobile','profile_pic']
 
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model=models.Product
+        fields=['name','price','description','product_image']
 
 #for contact us page
 class ContactusForm(forms.Form):
