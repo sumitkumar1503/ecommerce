@@ -8,9 +8,10 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 
 # Create your views here.
 def home_view(request):
+    products=models.Product.objects.all()
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
-    return render(request,'ecom/index.html')
+    return render(request,'ecom/index.html',{'products':products})
 
 #for showing login button for admin(by sumit)
 def adminclick_view(request):
