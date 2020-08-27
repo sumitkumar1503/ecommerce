@@ -321,7 +321,7 @@ body {
           <div class="row">
             <div class="el-wrapper">
               <div class="box-up">
-                <img class="img" src="{% static p.product_image.url %}" alt="product pic">
+                <img class="img" src="{% static p.product_image.url %}" alt="product pic" height="300px" width="300px">
                 <div class="img-info">
                   <div class="info-inner">
                     <span class="p-name">{{p.name}}</span>
@@ -336,7 +336,7 @@ body {
                   <div class="h-bg-inner"></div>
                 </div>
 
-                <a class="cart" href="#">
+                <a class="cart" href="{% url 'add-to-cart' p.id  %}">
                   <span class="price">₹ {{p.price}}</span>
                   <span class="add-to-cart">
                     <span class="txt">Add in cart</span>
@@ -359,7 +359,13 @@ body {
 
   {% endfor %}
 </div>
-
+<script>
+    {%if messages %}
+    {%for message in messages%}
+    alert('{{message}}');
+    {%endfor%}
+    {%endif%}
+</script>
 <br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br>
 <!-- 2nd rowww -->

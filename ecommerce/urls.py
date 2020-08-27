@@ -27,6 +27,9 @@ urlpatterns = [
     path('delete-product/<int:pk>', views.delete_product_view,name='delete-product'),
     path('update-product/<int:pk>', views.update_product_view,name='update-product'),
 
+    path('add-to-cart/<int:pk>', views.add_to_cart_view,name='add-to-cart'),
+    path('cart', views.cart_view,name='cart'),
+    path('remove-from-cart/<int:pk>', views.remove_from_cart_view,name='remove-from-cart'),
 
     path('customersignup', views.customer_signup_view),
     path('customerlogin', LoginView.as_view(template_name='ecom/customerlogin.html')),
