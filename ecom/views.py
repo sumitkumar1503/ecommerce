@@ -211,6 +211,44 @@ def remove_from_cart_view(request,pk):
         response.set_cookie('product_ids',value)
         return response
 
+@login_required(login_url='customerlogin')
+def customer_address_view(request):
+    addressForm = forms.AddressForm()
+    if request.method == 'POST':
+        addressForm = forms.AddressForm(request.POST)
+        if addressForm.is_valid():
+            email = addressForm.cleaned_data['Email']
+            mobile=addressForm.cleaned_data['Mobile']
+            address = addressForm.cleaned_data['Address']
+            #for showing total price on payment page.....accessing id from cookies then fetching  price of product from db
+            total=0
+            if 'product_ids' in request.COOKIES:
+                product_ids = request.COOKIES['product_ids']
+                if product_ids != "":
+                    product_id_in_cart=product_ids.split('|')
+                    products=models.Product.objects.all().filter(id__in = product_id_in_cart)
+                    for p in products:
+                        total=total+p.price
+
+            response = render(request, 'ecom/payment.html',{'total':total})
+            response.set_cookie('email',email)
+            response.set_cookie('mobile',mobile)
+            response.set_cookie('address',address)
+            return response
+    return render(request,'ecom/customer_address.html',{'addressForm':addressForm})
+
+@login_required(login_url='customerlogin')
+def payment_success_view(request):
+
+    # Here we will place order | after successful payment
+    # we will fetch customer name, mobile, address, Email
+    # we will fetch product id from cookies then respective details from db
+    # then we will create order objects and store in db
+    # after that we will delete cookies because after order placed...cart should be empty
+
+
+    return render(request,'ecom/payment_success.html')
+
 
 #---------------------------------------------------------------------------------
 #------------------------ CUSTOMER RELATED VIEWS START ------------------------------

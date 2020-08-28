@@ -20,6 +20,12 @@ class ProductForm(forms.ModelForm):
         model=models.Product
         fields=['name','price','description','product_image']
 
+class AddressForm(forms.Form):
+    Email = forms.EmailField()
+    Mobile= forms.IntegerField()
+    Address = forms.CharField(max_length=500)
+
+
 #for contact us page
 class ContactusForm(forms.Form):
     Name = forms.CharField(max_length=30)
