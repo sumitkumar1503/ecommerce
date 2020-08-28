@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -8,10 +9,18 @@
 </head>
 
 <body>
-  {% include "ecom/navbar.html" %}
+  {%if request.user.is_authenticated%}
+    {% include "ecom/customer_navbar.html" %}
+  {%else%}
+    {% include "ecom/navbar.html" %}
+  {%endif%}
+
+
   {%block content%}
 
   {%endblock content%}
+
+  
   {% include "ecom/footer.html" %}
 </body>
 <!--

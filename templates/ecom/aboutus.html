@@ -16,7 +16,11 @@
 </head>
 
 <body style="background-color: #B3E5FC;">
-  {% include "ecom/navbar.html" %}
+  {%if request.user.is_authenticated%}
+    {% include "ecom/customer_navbar.html" %}
+  {%else%}
+    {% include "ecom/navbar.html" %}
+  {%endif%}
 <h3 class='alert alert-success'>WE ARE BOSS</h3>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
   {% include "ecom/footer.html" %}

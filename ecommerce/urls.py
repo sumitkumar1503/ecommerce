@@ -39,6 +39,6 @@ urlpatterns = [
 
 
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
-    path('logout', LogoutView.as_view(template_name='ecom/index.html'),name='logout'),
+    path('logout', LogoutView.as_view(template_name='ecom/logout.html'),name='logout'),
 
 ]

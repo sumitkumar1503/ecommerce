@@ -12,7 +12,11 @@
 
 <body style="background-color: #B3E5FC;">
 
-  {% include "ecom/navbar.html" %}
+  {%if request.user.is_authenticated%}
+    {% include "ecom/customer_navbar.html" %}
+  {%else%}
+    {% include "ecom/navbar.html" %}
+  {%endif%}
 
   <center>
     <h3 class='alert alert-success'>Send Us Your Valuable Feedback !</h3>
