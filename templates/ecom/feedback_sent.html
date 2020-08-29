@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+  {%if request.user.is_authenticated%}
+    {% include "ecom/customer_navbar.html" %}
+  {%else%}
+    {% include "ecom/navbar.html" %}
+  {%endif%}
+<br><br><br>
+<h3 style="color:blue;text-align:center;">Your Feedback Sent Succesfully !</h3>
+<br>
+<div style="text-align:center;">
+  <img src="{% static "images/success.png" %}"  style="width:100px; height:100px; ">
+</div>
+
+<br><br><br><br><br><br><br><br>
+  {% include "ecom/footer.html" %}
+
+<!--
+developed By : sumit kumar
+facebook : fb.com/sumit.luv
+youtube : youtube.com/lazycoders
+-->

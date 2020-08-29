@@ -1,0 +1,80 @@
+{% extends 'ecom/customer_base.html' %}
+{% load static %}
+{% block content %}
+
+
+<style media="screen">
+  body {
+    background-color:#8c9eff;
+  }
+  .button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 28px;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  }
+
+  .button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+  }
+
+  .button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+  }
+
+  .button:hover span {
+  padding-right: 25px;
+  }
+
+  .button:hover span:after {
+  opacity: 1;
+  right: 0;
+  }
+
+
+</style>
+<br><br><br>
+<div style="padding-left:300px;" class="container">
+
+        <div class="col-sm-2 col-md-2">
+            <img src="{% static customer.profile_pic.url %}"   alt="profile pic" class="img-rounded img-responsive" />
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <blockquote>
+                <p>{{request.user}}</p> <small><cite title="Source Title">{{customer.address}}  <i class="glyphicon glyphicon-map-marker"></i></cite></small>
+            </blockquote>
+            <p> <i class="glyphicon glyphicon-phone"></i> {{customer.mobile}}
+            </p>
+        </div>
+
+</div>
+<br>
+<div style="text-align: center;">
+  <a href="/edit-profile"><button class="button" ><span>Edit Profile </span></button></a>
+</div>
+<br><br><br><br><br><br>
+<!--
+developed By : sumit kumar
+facebook : fb.com/sumit.luv
+youtube : youtube.com/lazycoders
+-->
+
+
+
+{% endblock content %}

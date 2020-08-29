@@ -64,12 +64,38 @@ def afterlogin_view(request):
 #---------------------------------------------------------------------------------
 @login_required(login_url='adminlogin')
 def admin_dashboard_view(request):
-    return render(request,'ecom/admin_dashboard.html')
+    # for cards on dashboard
+    customercount=models.Customer.objects.all().count()
+    productcount=models.Product.objects.all().count()
+    ordercount=models.Orders.objects.all().count()
 
+    # for recent order tables
+    orders=models.Orders.objects.all()
+    ordered_products=[]
+    ordered_bys=[]
+    for order in orders:
+        ordered_product=models.Product.objects.all().filter(id=order.product.id)
+        ordered_by=models.Customer.objects.all().filter(id = order.customer.id)
+        ordered_products.append(ordered_product)
+        ordered_bys.append(ordered_by)
+
+
+    mydict={
+    'customercount':customercount,
+    'productcount':productcount,
+    'ordercount':ordercount,
+    'data':zip(ordered_products,ordered_bys,orders),
+    }
+    return render(request,'ecom/admin_dashboard.html',context=mydict)
+
+
+
+@login_required(login_url='adminlogin')
 def view_customer_view(request):
     customers=models.Customer.objects.all()
     return render(request,'ecom/view_customer.html',{'customers':customers})
 
+@login_required(login_url='adminlogin')
 def delete_customer_view(request,pk):
     customer=models.Customer.objects.get(id=pk)
     user=models.User.objects.get(id=customer.user_id)
@@ -77,6 +103,7 @@ def delete_customer_view(request,pk):
     customer.delete()
     return redirect('view-customer')
 
+@login_required(login_url='adminlogin')
 def update_customer_view(request,pk):
     customer=models.Customer.objects.get(id=pk)
     user=models.User.objects.get(id=customer.user_id)
@@ -95,12 +122,12 @@ def update_customer_view(request,pk):
     return render(request,'ecom/admin_update_customer.html',context=mydict)
 
 
-
+@login_required(login_url='adminlogin')
 def admin_products_view(request):
     products=models.Product.objects.all()
     return render(request,'ecom/admin_products.html',{'products':products})
 
-
+@login_required(login_url='adminlogin')
 def admin_add_product_view(request):
     productForm=forms.ProductForm()
     if request.method=='POST':
@@ -110,12 +137,13 @@ def admin_add_product_view(request):
         return HttpResponseRedirect('admin-products')
     return render(request,'ecom/admin_add_products.html',{'productForm':productForm})
 
-
+@login_required(login_url='adminlogin')
 def delete_product_view(request,pk):
     product=models.Product.objects.get(id=pk)
     product.delete()
     return redirect('admin-products')
 
+@login_required(login_url='adminlogin')
 def update_product_view(request,pk):
     product=models.Product.objects.get(id=pk)
     productForm=forms.ProductForm(instance=product)
@@ -125,6 +153,44 @@ def update_product_view(request,pk):
             productForm.save()
             return redirect('admin-products')
     return render(request,'ecom/admin_update_product.html',{'productForm':productForm})
+
+@login_required(login_url='adminlogin')
+def admin_view_booking_view(request):
+    orders=models.Orders.objects.all()
+    ordered_products=[]
+    ordered_bys=[]
+    for order in orders:
+        ordered_product=models.Product.objects.all().filter(id=order.product.id)
+        ordered_by=models.Customer.objects.all().filter(id = order.customer.id)
+        ordered_products.append(ordered_product)
+        ordered_bys.append(ordered_by)
+    return render(request,'ecom/admin_view_booking.html',{'data':zip(ordered_products,ordered_bys,orders)})
+
+
+@login_required(login_url='adminlogin')
+def delete_order_view(request,pk):
+    order=models.Orders.objects.get(id=pk)
+    order.delete()
+    return redirect('admin-view-booking')
+
+
+
+@login_required(login_url='adminlogin')
+def update_order_view(request,pk):
+    order=models.Orders.objects.get(id=pk)
+    orderForm=forms.OrderForm(instance=order)
+    if request.method=='POST':
+        orderForm=forms.OrderForm(request.POST,instance=order)
+        if orderForm.is_valid():
+            orderForm.save()
+            return redirect('admin-view-booking')
+    return render(request,'ecom/update_order.html',{'orderForm':orderForm})
+
+@login_required(login_url='adminlogin')
+def view_feedback_view(request):
+    feedbacks=models.Feedback.objects.all().order_by('-id')
+    return render(request,'ecom/view_feedback.html',{'feedbacks':feedbacks})
+
 
 
 #---------------------------------------------------------------------------------
@@ -322,12 +388,52 @@ def customer_home_view(request):
     return render(request,'ecom/customer_home.html',{'products':products,'product_count_in_cart':product_count_in_cart})
 
 
+@login_required(login_url='customerlogin')
+@user_passes_test(is_customer)
+def my_order_view(request):
+    customer=models.Customer.objects.get(user_id=request.user.id)
+    orders=models.Orders.objects.all().filter(customer_id = customer)
+    ordered_products=[]
+    for order in orders:
+        ordered_product=models.Product.objects.all().filter(id=order.product.id)
+        ordered_products.append(ordered_product)
+
+    return render(request,'ecom/my_order.html',{'data':zip(ordered_products,orders)})
+
+@login_required(login_url='customerlogin')
+@user_passes_test(is_customer)
+def my_profile_view(request):
+    customer=models.Customer.objects.get(user_id=request.user.id)
+    return render(request,'ecom/my_profile.html',{'customer':customer})
 
 
+@login_required(login_url='customerlogin')
+@user_passes_test(is_customer)
+def edit_profile_view(request):
+    customer=models.Customer.objects.get(user_id=request.user.id)
+    user=models.User.objects.get(id=customer.user_id)
+    userForm=forms.CustomerUserForm(instance=user)
+    customerForm=forms.CustomerForm(request.FILES,instance=customer)
+    mydict={'userForm':userForm,'customerForm':customerForm}
+    if request.method=='POST':
+        userForm=forms.CustomerUserForm(request.POST,instance=user)
+        customerForm=forms.CustomerForm(request.POST,instance=customer)
+        if userForm.is_valid() and customerForm.is_valid():
+            user=userForm.save()
+            user.set_password(user.password)
+            user.save()
+            customerForm.save()
+            return HttpResponseRedirect('my-profile')
+    return render(request,'ecom/edit_profile.html',context=mydict)
 
-
-
-
+def send_feedback_view(request):
+    feedbackForm=forms.FeedbackForm()
+    if request.method == 'POST':
+        feedbackForm = forms.FeedbackForm(request.POST)
+        if feedbackForm.is_valid():
+            feedbackForm.save()
+            return render(request, 'ecom/feedback_sent.html')
+    return render(request, 'ecom/send_feedback.html', {'feedbackForm':feedbackForm})
 
 
 

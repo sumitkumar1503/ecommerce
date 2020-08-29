@@ -26,12 +26,23 @@ urlpatterns = [
     path('admin-add-product', views.admin_add_product_view,name='admin-add-product'),
     path('delete-product/<int:pk>', views.delete_product_view,name='delete-product'),
     path('update-product/<int:pk>', views.update_product_view,name='update-product'),
+    path('admin-view-booking', views.admin_view_booking_view,name='admin-view-booking'),
+    path('view-feedback', views.view_feedback_view,name='view-feedback'),
+
+
+    path('delete-order/<int:pk>', views.delete_order_view,name='delete-order'),
+    path('update-order/<int:pk>', views.update_order_view,name='update-order'),
+
 
     path('add-to-cart/<int:pk>', views.add_to_cart_view,name='add-to-cart'),
     path('cart', views.cart_view,name='cart'),
     path('remove-from-cart/<int:pk>', views.remove_from_cart_view,name='remove-from-cart'),
     path('customer-address', views.customer_address_view,name='customer-address'),
     path('payment-success', views.payment_success_view,name='payment-success'),
+    path('my-order', views.my_order_view,name='my-order'),
+    path('my-profile', views.my_profile_view,name='my-profile'),
+    path('edit-profile', views.edit_profile_view,name='edit-profile'),
+    path('send-feedback', views.send_feedback_view,name='send-feedback'),
 
     path('customersignup', views.customer_signup_view),
     path('customerlogin', LoginView.as_view(template_name='ecom/customerlogin.html'),name='customerlogin'),

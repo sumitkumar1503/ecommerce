@@ -3,3 +3,13 @@
     also be deleted and other 2 will be their
 
 - suppose some user click on purchase button without having products in cart then it will ask to add product in cart
+
+
+
+
+========================================
+loopholes
+========================================
+
+when user edit their profile then he/she must login again
+because their username is updated in db so
