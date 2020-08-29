@@ -307,10 +307,10 @@ body {
 }
   </style>
 
-
-
-
-<!-- column1 -->
+{%if products%}
+<h3 style="text-align:center; color:yellow;">{{word}}</h3>
+<br>
+<!-- products data starttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt -->
   <div class="row">
 
       {% for p in products %}
@@ -351,14 +351,18 @@ body {
 <!-- card1 end -->
 {% if forloop.counter|divisibleby:"3" %}
     </div>
+
     <div class="row">
 
           <br><br><br><br><br>
 {% endif %}
-<!-- column1 end -->
-
   {% endfor %}
 </div>
+<!-- products data enddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd -->
+{%else%}
+<h3 style="text-align:center; color:yellow;">No Search Found</h3>
+{%endif%}
+
 <script>
     {%if messages %}
     {%for message in messages%}

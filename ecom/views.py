@@ -196,6 +196,22 @@ def view_feedback_view(request):
 #---------------------------------------------------------------------------------
 #------------------------ PUBLIC CUSTOMER RELATED VIEWS START ------------------------------
 #---------------------------------------------------------------------------------
+def search_view(request):
+    # whatever user write in search box we get in query
+    query = request.GET['query']
+    products=models.Product.objects.all().filter(name__icontains=query)
+    if 'product_ids' in request.COOKIES:
+        product_ids = request.COOKIES['product_ids']
+        counter=product_ids.split('|')
+        product_count_in_cart=len(set(counter))
+    else:
+        product_count_in_cart=0
+    word="Searched Result :"
+    if request.user.is_authenticated:
+        return render(request,'ecom/customer_home.html',{'products':products,'word':word,'product_count_in_cart':product_count_in_cart})
+
+    return render(request,'ecom/index.html',{'products':products,'word':word,'product_count_in_cart':product_count_in_cart})
+
 
 
 def add_to_cart_view(request,pk):
@@ -222,6 +238,7 @@ def add_to_cart_view(request,pk):
     messages.info(request, product.name + ' added to cart successfully!')
 
     return response
+
 
 
 
