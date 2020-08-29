@@ -35,8 +35,7 @@ EMAIL_RECEIVING_USER = 'youremail@gmail.com'
 ```
 
 ## Drawbacks/LoopHoles
-
-
+- When user edit their profile then he/she must login again because their username/password is updated in db.
 
 ## Feedback
 Any suggestion and feedback is welcome. You can message me on facebook

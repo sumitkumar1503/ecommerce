@@ -6,7 +6,6 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib import messages
 
-# Create your views here.
 
 def home_view(request):
     products=models.Product.objects.all()
@@ -19,6 +18,7 @@ def home_view(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('afterlogin')
     return render(request,'ecom/index.html',{'products':products,'product_count_in_cart':product_count_in_cart})
+
 
 #for showing login button for admin(by sumit)
 def adminclick_view(request):
@@ -46,7 +46,7 @@ def customer_signup_view(request):
         return HttpResponseRedirect('customerlogin')
     return render(request,'ecom/customersignup.html',context=mydict)
 
-#-----------for checking user iscustomer(by sumit)
+#-----------for checking user iscustomer
 def is_customer(user):
     return user.groups.filter(name='CUSTOMER').exists()
 
@@ -79,7 +79,6 @@ def admin_dashboard_view(request):
         ordered_products.append(ordered_product)
         ordered_bys.append(ordered_by)
 
-
     mydict={
     'customercount':customercount,
     'productcount':productcount,
@@ -89,12 +88,13 @@ def admin_dashboard_view(request):
     return render(request,'ecom/admin_dashboard.html',context=mydict)
 
 
-
+# admin view customer table
 @login_required(login_url='adminlogin')
 def view_customer_view(request):
     customers=models.Customer.objects.all()
     return render(request,'ecom/view_customer.html',{'customers':customers})
 
+# admin delete customer
 @login_required(login_url='adminlogin')
 def delete_customer_view(request,pk):
     customer=models.Customer.objects.get(id=pk)
@@ -102,6 +102,7 @@ def delete_customer_view(request,pk):
     user.delete()
     customer.delete()
     return redirect('view-customer')
+
 
 @login_required(login_url='adminlogin')
 def update_customer_view(request,pk):
@@ -121,12 +122,14 @@ def update_customer_view(request,pk):
             return redirect('view-customer')
     return render(request,'ecom/admin_update_customer.html',context=mydict)
 
-
+# admin view the product
 @login_required(login_url='adminlogin')
 def admin_products_view(request):
     products=models.Product.objects.all()
     return render(request,'ecom/admin_products.html',{'products':products})
 
+
+# admin add product by clicking on floating button
 @login_required(login_url='adminlogin')
 def admin_add_product_view(request):
     productForm=forms.ProductForm()
@@ -137,11 +140,13 @@ def admin_add_product_view(request):
         return HttpResponseRedirect('admin-products')
     return render(request,'ecom/admin_add_products.html',{'productForm':productForm})
 
+
 @login_required(login_url='adminlogin')
 def delete_product_view(request,pk):
     product=models.Product.objects.get(id=pk)
     product.delete()
     return redirect('admin-products')
+
 
 @login_required(login_url='adminlogin')
 def update_product_view(request,pk):
@@ -153,6 +158,7 @@ def update_product_view(request,pk):
             productForm.save()
             return redirect('admin-products')
     return render(request,'ecom/admin_update_product.html',{'productForm':productForm})
+
 
 @login_required(login_url='adminlogin')
 def admin_view_booking_view(request):
@@ -173,8 +179,7 @@ def delete_order_view(request,pk):
     order.delete()
     return redirect('admin-view-booking')
 
-
-
+# for changing status of order (pending,delivered...)
 @login_required(login_url='adminlogin')
 def update_order_view(request,pk):
     order=models.Orders.objects.get(id=pk)
@@ -186,6 +191,8 @@ def update_order_view(request,pk):
             return redirect('admin-view-booking')
     return render(request,'ecom/update_order.html',{'orderForm':orderForm})
 
+
+# admin view the feedback
 @login_required(login_url='adminlogin')
 def view_feedback_view(request):
     feedbacks=models.Feedback.objects.all().order_by('-id')
@@ -194,7 +201,7 @@ def view_feedback_view(request):
 
 
 #---------------------------------------------------------------------------------
-#------------------------ PUBLIC CUSTOMER RELATED VIEWS START ------------------------------
+#------------------------ PUBLIC CUSTOMER RELATED VIEWS START ---------------------
 #---------------------------------------------------------------------------------
 def search_view(request):
     # whatever user write in search box we get in query
@@ -206,24 +213,30 @@ def search_view(request):
         product_count_in_cart=len(set(counter))
     else:
         product_count_in_cart=0
+
+    # word variable will be shown in html when user click on search button
     word="Searched Result :"
+
     if request.user.is_authenticated:
         return render(request,'ecom/customer_home.html',{'products':products,'word':word,'product_count_in_cart':product_count_in_cart})
-
     return render(request,'ecom/index.html',{'products':products,'word':word,'product_count_in_cart':product_count_in_cart})
 
 
-
+# any one can add product to cart, no need of signin
 def add_to_cart_view(request,pk):
     products=models.Product.objects.all()
+
+    #for cart counter, fetching products ids added by customer from cookies
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
         product_count_in_cart=len(set(counter))
     else:
         product_count_in_cart=1
+
     response = render(request, 'ecom/index.html',{'products':products,'product_count_in_cart':product_count_in_cart})
 
+    #adding product id to cookies
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         if product_ids=="":
@@ -241,15 +254,16 @@ def add_to_cart_view(request,pk):
 
 
 
-
+# for checkout of cart
 def cart_view(request):
-    #for counter
+    #for cart counter
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
         counter=product_ids.split('|')
         product_count_in_cart=len(set(counter))
     else:
         product_count_in_cart=0
+
     # fetching product details from db whose id is present in cookie
     products=None
     total=0
@@ -262,7 +276,6 @@ def cart_view(request):
             #for total price shown in cart
             for p in products:
                 total=total+p.price
-
     return render(request,'ecom/cart.html',{'products':products,'total':total,'product_count_in_cart':product_count_in_cart})
 
 
@@ -274,6 +287,7 @@ def remove_from_cart_view(request,pk):
         product_count_in_cart=len(set(counter))
     else:
         product_count_in_cart=0
+
     # removing product id from cookie
     total=0
     if 'product_ids' in request.COOKIES:
@@ -299,6 +313,35 @@ def remove_from_cart_view(request,pk):
         response.set_cookie('product_ids',value)
         return response
 
+
+def send_feedback_view(request):
+    feedbackForm=forms.FeedbackForm()
+    if request.method == 'POST':
+        feedbackForm = forms.FeedbackForm(request.POST)
+        if feedbackForm.is_valid():
+            feedbackForm.save()
+            return render(request, 'ecom/feedback_sent.html')
+    return render(request, 'ecom/send_feedback.html', {'feedbackForm':feedbackForm})
+
+
+#---------------------------------------------------------------------------------
+#------------------------ CUSTOMER RELATED VIEWS START ------------------------------
+#---------------------------------------------------------------------------------
+@login_required(login_url='customerlogin')
+@user_passes_test(is_customer)
+def customer_home_view(request):
+    products=models.Product.objects.all()
+    if 'product_ids' in request.COOKIES:
+        product_ids = request.COOKIES['product_ids']
+        counter=product_ids.split('|')
+        product_count_in_cart=len(set(counter))
+    else:
+        product_count_in_cart=0
+    return render(request,'ecom/customer_home.html',{'products':products,'product_count_in_cart':product_count_in_cart})
+
+
+
+# shipment address before placing order
 @login_required(login_url='customerlogin')
 def customer_address_view(request):
     # this is for checking whether product is present in cart or not
@@ -321,7 +364,7 @@ def customer_address_view(request):
         addressForm = forms.AddressForm(request.POST)
         if addressForm.is_valid():
             # here we are taking address, email, mobile at time of order placement
-            # we are not taking it from customer signup table because
+            # we are not taking it from customer account table because
             # these thing can be changes
             email = addressForm.cleaned_data['Email']
             mobile=addressForm.cleaned_data['Mobile']
@@ -342,6 +385,8 @@ def customer_address_view(request):
             response.set_cookie('address',address)
             return response
     return render(request,'ecom/customer_address.html',{'addressForm':addressForm,'product_in_cart':product_in_cart,'product_count_in_cart':product_count_in_cart})
+
+
 
 
 # here we are just directing to this view...actually we have to check whther payment is successful or not
@@ -389,21 +434,6 @@ def payment_success_view(request):
 
 
 
-#---------------------------------------------------------------------------------
-#------------------------ CUSTOMER RELATED VIEWS START ------------------------------
-#---------------------------------------------------------------------------------
-@login_required(login_url='customerlogin')
-@user_passes_test(is_customer)
-def customer_home_view(request):
-    products=models.Product.objects.all()
-    if 'product_ids' in request.COOKIES:
-        product_ids = request.COOKIES['product_ids']
-        counter=product_ids.split('|')
-        product_count_in_cart=len(set(counter))
-    else:
-        product_count_in_cart=0
-    return render(request,'ecom/customer_home.html',{'products':products,'product_count_in_cart':product_count_in_cart})
-
 
 @login_required(login_url='customerlogin')
 @user_passes_test(is_customer)
@@ -416,6 +446,7 @@ def my_order_view(request):
         ordered_products.append(ordered_product)
 
     return render(request,'ecom/my_order.html',{'data':zip(ordered_products,orders)})
+
 
 @login_required(login_url='customerlogin')
 @user_passes_test(is_customer)
@@ -442,15 +473,6 @@ def edit_profile_view(request):
             customerForm.save()
             return HttpResponseRedirect('my-profile')
     return render(request,'ecom/edit_profile.html',context=mydict)
-
-def send_feedback_view(request):
-    feedbackForm=forms.FeedbackForm()
-    if request.method == 'POST':
-        feedbackForm = forms.FeedbackForm(request.POST)
-        if feedbackForm.is_valid():
-            feedbackForm.save()
-            return render(request, 'ecom/feedback_sent.html')
-    return render(request, 'ecom/send_feedback.html', {'feedbackForm':feedbackForm})
 
 
 

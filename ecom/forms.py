@@ -10,6 +10,7 @@ class CustomerUserForm(forms.ModelForm):
         widgets = {
         'password': forms.PasswordInput()
         }
+        
 class CustomerForm(forms.ModelForm):
     class Meta:
         model=models.Customer
@@ -20,6 +21,7 @@ class ProductForm(forms.ModelForm):
         model=models.Product
         fields=['name','price','description','product_image']
 
+#address of shipment
 class AddressForm(forms.Form):
     Email = forms.EmailField()
     Mobile= forms.IntegerField()
@@ -30,6 +32,7 @@ class FeedbackForm(forms.ModelForm):
         model=models.Feedback
         fields=['name','feedback']
 
+#for updating status of order
 class OrderForm(forms.ModelForm):
     class Meta:
         model=models.Orders

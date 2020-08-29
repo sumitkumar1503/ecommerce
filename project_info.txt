@@ -1,4 +1,5 @@
 - suppose customer places order and admin deleted that user(fraud detection) then their orders will automatically deleted
+
 - suppose 1 customer places 4 prducts order and admin deleted(suppose out of stock) 2 product then that 2 product order will
     also be deleted and other 2 will be their
 
