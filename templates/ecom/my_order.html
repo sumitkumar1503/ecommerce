@@ -157,6 +157,7 @@ p {
     border-color: #ff2b00;
     border-radius: 1px
 }
+
 </style>
 <br>
 <h3 style="text-align:center;">Thank You For Your Order  <strong>{{request.user}}</strong> !</h3> <br><br>
@@ -177,15 +178,17 @@ p {
                           <p class="title"><strong>Name : </strong>{{product.name}} <br> <strong>Description : </strong>{{product.description}}</p> <span class="text-muted"><strong>Price : </strong>{{product.price}} </span>
 
                       </figcaption>
-                      {%endfor%}
+
                   </figure>
                 </li>
                 <li class="col-md-4">
                     <div class="col"> <strong>Shipment Address:</strong> <br> {{order.address}}</div>
                 </li>
                 <li class="col-md-4">
-                    <div class="col"> <strong>Status:</strong> <br> {{order.status}} </div>
+                    <div class="col"> <strong>Status:</strong> <br> {{order.status}} </div> <br>
+                    <h4><a style="text-decoration:none; color:blue;" href="{% url 'download-invoice' order.id product.id  %}" >Download Invoice</a></h4>
                 </li>
+                {%endfor%}
             </ul>
             <hr>
 
