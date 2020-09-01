@@ -1,7 +1,17 @@
 # ECOMMERCE
 ![developer](https://img.shields.io/badge/Developed%20By%20%3A-Sumit%20Kumar-red)
 ---
-## FEATURES
+## screenshots
+### Homepage
+![homepage snap](https://github.com/sumitkumar1503/hospitalmanagement/blob/master/static/screenshots/homepage.png?raw=true)
+### Admin Dashboard
+![dashboard snap](https://github.com/sumitkumar1503/hospitalmanagement/blob/master/static/screenshots/admin_dashboard.png?raw=true)
+### Invoice
+![invoice snap](https://github.com/sumitkumar1503/hospitalmanagement/blob/master/static/screenshots/invoice.png?raw=true)
+### Doctor list
+![doctor snap](https://github.com/sumitkumar1503/hospitalmanagement/blob/master/static/screenshots/admin_doctor.png?raw=true)
+---
+## FUNCTIONS
 ## Customer
 - Customer can view/search products without login.
 - Customer can also add product to cart without login (if customer try to add same product in cart. It will add only one)
@@ -66,6 +76,7 @@ EMAIL_RECEIVING_USER = 'youremail@gmail.com'
 
 ## Drawbacks/LoopHoles
 - When user edit their profile then he/she must login again because their username/password is updated in db.
+- Popup of product is added to cart is shown when click on Ecommerce logo (soon i will fix it)
 
 ## Feedback
 Any suggestion and feedback is welcome. You can message me on facebook
