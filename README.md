@@ -81,6 +81,9 @@ https://myaccount.google.com/lesssecureapps
 - When user edit their profile then he/she must login again because their username/password is updated in db.
 - Popup of product is added to cart is shown when click on Ecommerce logo (soon i will fix it)
 
+## Disclaimer
+This project is developed for demo purpose and it's not supposed to be used in real application.
+
 ## Feedback
 Any suggestion and feedback is welcome. You can message me on facebook
 - [Contact on Facebook](https://fb.com/sumit.luv)
