@@ -14,7 +14,7 @@
 ## FUNCTIONS
 ## Customer
 - Customer can view/search products without login.
-- Customer can also add product to cart without login (if customer try to add same product in cart. It will add only one)
+- Customer can also add/remove product to cart without login (if customer try to add same product in cart. It will add only one)
 - When customer try to purchase product, then he/she must login to system.
 - After creating account and login to system, he/she can place order.
 - There is a payment page also (just for demo, DONT FILL YOUR CARD DETAILS THERE ,By the way, website do not save that details)
