@@ -73,7 +73,10 @@ EMAIL_HOST_USER = 'youremail@gmail.com'
 EMAIL_HOST_PASSWORD = 'your email password'
 EMAIL_RECEIVING_USER = 'youremail@gmail.com'
 ```
-
+- Login to gmail through host email id in your browser and open following link and turn it ON
+```
+https://myaccount.google.com/lesssecureapps
+```
 ## Drawbacks/LoopHoles
 - When user edit their profile then he/she must login again because their username/password is updated in db.
 - Popup of product is added to cart is shown when click on Ecommerce logo (soon i will fix it)
