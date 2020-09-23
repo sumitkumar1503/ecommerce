@@ -52,6 +52,7 @@ py manage.py createsuperuser
 ```
 pip install django==3.0.5
 pip install django-widget-tweaks
+pip install xhtml2pdf
 
 ```
 - Download This Project Zip Folder and Extract it
